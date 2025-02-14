@@ -76,17 +76,26 @@ def write_to_google_doc(credentials_path, doc_title, notes_data):
     logger.info(f"Created document with ID: {document_id}")
     
     # Share the document with your personal account
-    user_email = os.getenv('GOOGLE_KEEP_EMAIL')  # Using the same email from your Keep account
+    user_email = os.getenv('GOOGLE_KEEP_EMAIL')
+    if not user_email:
+        raise ValueError("GOOGLE_KEEP_EMAIL environment variable is not set")
+    logger.info(f"Attempting to share document with: {user_email}")
+    
+    # First, share the document with editor role
+    permission = {
+        'type': 'user',
+        'role': 'writer',
+        'emailAddress': user_email.strip()
+    }
+    logger.info(f"Creating permission: {permission}")
+    
     drive_service.permissions().create(
         fileId=document_id,
-        body={
-            'type': 'user',
-            'role': 'owner',  # Make you the owner
-            'emailAddress': user_email,
-            'transferOwnership': True
-        }
+        body=permission,
+        fields='id',
+        sendNotificationEmail=False
     ).execute()
-    logger.info(f"Transferred document ownership to {user_email}")
+    logger.info(f"Successfully shared document with {user_email}")
     
     # Prepare the content to write to the document
     requests = []
