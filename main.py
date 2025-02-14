@@ -1,6 +1,11 @@
 import gkeepapi
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # =============================
 # Step 1: Access Google Keep Notes
@@ -51,13 +56,15 @@ def write_to_google_doc(credentials_path, doc_title, notes_data):
 # Main Execution
 # =============================
 if __name__ == "__main__":
-    # Google Keep credentials
-    EMAIL = "your_email@gmail.com"
-    PASSWORD = "your_app_password"  # Use App Password if 2FA is enabled
+    # Get credentials from environment variables
+    EMAIL = os.getenv('GOOGLE_KEEP_EMAIL')
+    PASSWORD = os.getenv('GOOGLE_KEEP_PASSWORD')
+    CREDENTIALS_PATH = os.getenv('GOOGLE_DOCS_CREDENTIALS_PATH')
+    DOC_TITLE = os.getenv('GOOGLE_DOCS_TITLE')
     
-    # Google Docs credentials file
-    CREDENTIALS_PATH = 'path/to/credentials.json'
-    DOC_TITLE = "My Google Keep Notes"
+    # Validate environment variables
+    if not all([EMAIL, PASSWORD, CREDENTIALS_PATH, DOC_TITLE]):
+        raise ValueError("Missing required environment variables. Please check your .env file.")
     
     # Fetch notes from Google Keep
     keep_notes = fetch_google_keep_notes(EMAIL, PASSWORD)
