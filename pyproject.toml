@@ -6,14 +6,21 @@ authors = ["Your Name <your_email@example.com>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/yourusername/google-keep-to-docs"
+packages = [
+    { include = "*.py" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-gkeepapi = "^0.14.0" # Unofficial library for Google Keep
+gkeepapi = "^0.14.0"
 google-auth = "^2.23.0"
 google-auth-oauthlib = "^1.0.0"
 google-auth-httplib2 = "^0.1.0"
 google-api-python-client = "^2.94.0"
+python-dotenv = "^1.0.0"
+urllib3 = "1.26.18"
+requests = "2.31.0"
+certifi = "2024.2.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -84,3 +84,6 @@ desktop.ini
 
 # Google credentials
 credentials.json
+
+# Google Keep Takeout
+Takeout/
